@@ -1,36 +1,54 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="csrf-token" content="{{ csrf_token() }}">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/app.css" type="text/css">
+    <link rel="stylesheet" href="/css/state.css" type="text/css">
+    <link rel="stylesheet" href="/css/layout.css" type="text/css">
+    <link rel="stylesheet" href="/css/theme.css" type="text/css">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+      <script src="https://code.iconify.design/1/1.0.7/iconify.min.js"></script>
+    <title>Portfolio</title>
+</head>
+<body>
+<div class="header flex flex-row justify-content-space-between">
+    <a href="/"><div class="logo">meportfolio</div></a>
 
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    <nav class=" flex flex-row justify-content-space-around align-items-center">
+        <a href="/" class="{{Request::is('/')?'current':''}} text-link">Home</a>
+        <a href="/projects/index" class="{{Request::is('projects/index')?'current-page':''}} text-link">Projects</a>
+        <a href="" class="social-media-link">
+            <img src="https://img.icons8.com/fluent/28/000000/github.png"/>
+        </a>
 
-        <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
-    </head>
-    <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100">
-            @include('layouts.navigation')
+        <a href="" class="social-media-link">
+            <img src="https://img.icons8.com/metro/28/000000/linkedin.png"/>
+        </a>
+    </nav>
 
-            <!-- Page Heading -->
-            @isset($header)
-                <header class="bg-white shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        {{ $header }}
-                    </div>
-                </header>
-            @endisset
+   
+</div>
+    @yield('content')
 
-            <!-- Page Content -->
-            <main>
-                @yield('content')
-            </main>
+    <div class="footer flex flex-row justify-content-space-between">
+        <nav class=" flex flex-row justify-content-space-around align-center">
+            <a href="/" class="{{Request::is('/')?'current':''}} text-link">Home</a>
+            <a href="/projects/index" class="{{Request::is('projects/index')?'current-page':''}} text-link">Projects</a>
+           
+            <a href="" class="social-media-link">
+                <img src="https://img.icons8.com/fluent/28/000000/github.png"/>
+            </a>
+
+            <a href="" class="social-media-link">
+                <img src="https://img.icons8.com/metro/28/000000/linkedin.png"/>
+            </a>
+
+        </nav>
+            <a href="/"><div class="logo">meportfolio</div></a>
         </div>
-    </body>
+</body>
 </html>
