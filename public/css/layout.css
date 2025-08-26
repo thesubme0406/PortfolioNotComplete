@@ -2,6 +2,7 @@
     width: 100%;
     padding: 2vmax 10%;
     position: relative
+    
 }
 
 
@@ -20,6 +21,11 @@
 
 .footer{
     padding: 5vmax 10%;
+    background: #bebebe;
+}
+
+.header{
+    background: #bebebe;
 }
 .landing-banner{
     width: 100%;
@@ -37,7 +43,6 @@
     height: inherit;
     padding-top: 10%;
     width: 100%;
-
 }
 
 .projects-cta__container{

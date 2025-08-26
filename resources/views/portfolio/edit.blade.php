@@ -85,7 +85,7 @@
     </form>
 </div>
 
-{{-- JS for dynamic add/remove --}}
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     function attachRemoveButtons() {

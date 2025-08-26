@@ -1,0 +1,141 @@
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f9fafc;
+    color: #2d2d2d;
+  }
+  .portfolio-dashboard {
+    max-width: 1200px;   
+    margin: 0 auto;     
+    padding: 0 2rem;    
+  }
+
+  .btn-gradient {
+    background: linear-gradient(135deg, #4f46e5, #3b82f6);
+    color: #fff !important;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 22px;
+    font-weight: 500;
+    transition: all 0.3s ease-in-out;
+  }
+  .btn-gradient:hover {
+    transform: translateY(-2px);
+    box-shadow: 0px 6px 18px rgba(79,70,229,0.3);
+  }
+  
+
+  .portfolio-section {
+    margin-bottom: 3rem;
+  }
+ 
+h2, .section-title {
+    font-size: 1.6rem;  
+    font-weight: 2000; 
+    color: #1a1a1a;     
+    margin-top: 2rem;    
+    margin-bottom: 1rem; 
+    letter-spacing: 0.5px;
+}
+
+
+.section-subtext {
+    font-size: 1rem;
+    font-style: italic;
+    color: #7a7a7a;
+}
+
+
+.card-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+  
+  /* Cards */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill,minmax(260px,1fr));
+    gap: 1.5rem;
+  }
+  .info-card {
+    background: #fff;
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .info-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 22px rgba(0,0,0,0.08);
+  }
+  
+  /* Skills */
+  .skills-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .skill-badge {
+    background: #eef2ff;
+    color: #3730a3;
+    border-radius: 8px;
+    padding: 6px 14px;
+    font-size: 0.9rem;
+    transition: 0.3s;
+  }
+  .skill-badge:hover {
+    background: #4338ca;
+    color: #fff;
+  }
+  
+ /* timeline qualification */
+  .timeline {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .timeline li {
+    margin-bottom: 1rem;
+    padding-left: 15px;
+    border-left: 2px solid #3b82f6;
+  }
+  .timeline .title {
+    font-weight: 600;
+  }
+  .timeline .meta {
+    display: block;
+    font-size: 0.9rem;
+    color: #6b7280;
+  }
+  
+  /* Contacts */
+  .contact-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill,minmax(220px,1fr));
+    gap: 1.5rem;
+  }
+  .contact-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 18px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.04);
+  }
+  .contact-card strong {
+    font-weight: 600;
+
+
+
+    color: #111827;
+  }
+  .contact-card p {
+    color: #4b5563;
+  }
+  
+  /* Empty state */
+  .empty-state {
+    font-style: italic;
+    color: #9ca3af;
+  }
+  
