@@ -23,8 +23,25 @@ body {
     transform: translateY(-2px);
     box-shadow: 0px 6px 18px rgba(79,70,229,0.3);
   }
+  .btn-delete {
+    background: linear-gradient(135deg, #ef4444, #dc2626); /* red gradient */
+    color: #fff !important;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 22px;
+    font-weight: 500;
+    transition: all 0.3s ease-in-out;
+  }
+  .btn-delete:hover {
+    transform: translateY(-2px);
+    box-shadow: 0px 6px 18px rgba(239,68,68,0.3);
+  }
   
-
+  .button-group {
+    display: flex;
+    gap: 12px; 
+  }
+  
   .portfolio-section {
     margin-bottom: 3rem;
   }

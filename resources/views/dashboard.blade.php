@@ -1,24 +1,33 @@
 @extends('layouts.app')
 
+
 @section('content')
 <div class="portfolio-dashboard container py-5">
 
-    {{-- Header --}}
-    <div class="dashboard-header d-flex justify-content-between align-items-center mb-5">
-        <div>
-            <h1 class="fw-bold mb-1">{{ $portfolio->name ?? Auth::user()->name }}</h1>
-            <p class="text-muted">Your portfolio overview</p>
-        </div>
-        @if($portfolio)
-            <a href="{{ route('portfolio.edit', $portfolio->id) }}" class="btn btn-gradient shadow-sm">
-                Edit Portfolio
-            </a>
-        @else
-            <a href="{{ route('portfolio.create') }}" class="btn btn-gradient shadow-sm">
-                Create Portfolio
-            </a>
-        @endif
+{{-- Header --}}
+<div class="dashboard-header d-flex justify-content-between align-items-center mb-5">
+    <div>
+        <h1 class="fw-bold mb-1">{{ $portfolio->name ?? Auth::user()->name }}</h1>
+        {{-- <p class="text-muted">Your portfolio overview</p> --}}
     </div>
+    @if($portfolio)
+    <div class="button-group">
+        <a href="{{ route('portfolio.edit', $portfolio->id) }}" class="btn btn-gradient shadow-sm">
+            Edit
+        </a>
+        <a href="{{ route('portfolio.destroy', $portfolio->id) }}" class="btn btn-delete shadow-sm">
+            Delete
+        </a>
+    </div>
+
+    
+    @else
+        {{-- <a href="{{ route('portfolio.create') }}" class="btn btn-gradient shadow-sm">
+            Create Portfolio
+        </a> --}}
+    @endif
+</div>
+
 
     @if($portfolio)
         {{-- Experiences --}}
