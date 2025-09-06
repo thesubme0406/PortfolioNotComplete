@@ -2,134 +2,196 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Portfolio;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Portfolio;
-use App\Models\Experience;
-use App\Models\Skill;
-use App\Models\Qualification;
-use App\Models\Contact;
 
 class PortfolioController extends Controller
 {
-    
+    // CREATE (show form)
     public function create()
     {
         return view('portfolio.create');
     }
 
+    // STORE (save new portfolio)
     public function store(Request $request)
     {
-        $user = Auth::user();
-
-        // Create portfolio
-        $portfolio = Portfolio::create([
-            'user_id' => $user->id,
-            'name' => $request->name,
-            'birthday' => $request->birthday,
-            'age' => $request->age,
+        $data = $request->validate([
+            'name'      => 'required|string|max:255',
+            'birthday'  => 'required|date',
+            'age'       => 'required|integer',
+            'experiences.*.title'       => 'nullable|string',
+            'experiences.*.description' => 'nullable|string',
+            'skills.*.name'             => 'nullable|string',
+            'skills.*.proficiency_level'=> 'nullable|string',
+            'qualifications.*.title'    => 'nullable|string',
+            'qualifications.*.institution'=> 'nullable|string',
+            'qualifications.*.year'     => 'nullable|string',
+            'contacts.*.type'           => 'nullable|string',
+            'contacts.*.detail'         => 'nullable|string',
         ]);
 
-        // Nested items
-        if($request->experiences) {
-            foreach($request->experiences as $exp){
-                $portfolio->experiences()->create($exp);
-            }
+        $user = Auth::user();
+
+        // Create Portfolio
+        $portfolio = $user->portfolio()->create([
+            'name'     => $data['name'],
+            'birthday' => $data['birthday'],
+            'age'      => $data['age'],
+        ]);
+
+        // Experiences
+        $experiences = collect($data['experiences'] ?? [])
+            ->filter(fn($exp) => !empty($exp['title']))
+            ->values()
+            ->all();
+        if (!empty($experiences)) {
+            $portfolio->experiences()->createMany($experiences);
         }
 
-        if($request->skills) {
-            foreach($request->skills as $skill){
-                $portfolio->skills()->create($skill);
-            }
+        // Skills
+        $skills = collect($data['skills'] ?? [])
+            ->filter(fn($s) => !empty($s['name']))
+            ->map(fn($s) => [
+                'skill_name'        => $s['name'],
+                'proficiency_level' => $s['proficiency_level'] ?? null
+            ])
+            ->values()
+            ->all();
+        if (!empty($skills)) {
+            $portfolio->skills()->createMany($skills);
         }
 
-        if($request->qualifications) {
-            foreach($request->qualifications as $q){
-                $portfolio->qualifications()->create($q);
-            }
+        // Qualifications
+        $qualifications = collect($data['qualifications'] ?? [])
+            ->filter(fn($q) => !empty($q['title']))
+            ->map(fn($q) => [
+                'qualification_name' => $q['title'],
+                'institution'        => $q['institution'] ?? null,
+                'year'               => $q['year'] ?? null
+            ])
+            ->values()
+            ->all();
+        if (!empty($qualifications)) {
+            $portfolio->qualifications()->createMany($qualifications);
         }
 
-        if($request->contacts) {
-            foreach($request->contacts as $c){
-                $portfolio->contacts()->create($c);
-            }
+        // Contacts
+        $contacts = collect($data['contacts'] ?? [])
+            ->filter(fn($c) => !empty($c['type']) && !empty($c['detail']))
+            ->map(fn($c) => [
+                'type'   => $c['type'],
+                'value'  => $c['detail']
+            ])
+            ->values()
+            ->all();
+        if (!empty($contacts)) {
+            $portfolio->contacts()->createMany($contacts);
         }
 
-        return redirect()->route('dashboard')->with('success','Portfolio created!');
+        return redirect()->route('dashboard')->with('success', 'Portfolio created successfully!');
     }
 
+    // EDIT (show form)
     public function edit(Portfolio $portfolio)
     {
-        $this->authorize('update', $portfolio); // Optional if you use Policies
         return view('portfolio.edit', compact('portfolio'));
     }
 
+    // UPDATE (save changes)
     public function update(Request $request, Portfolio $portfolio)
     {
-        $this->authorize('update', $portfolio); // Optional
-
-        $portfolio->update([
-            'name' => $request->name,
-            'birthday' => $request->birthday,
-            'age' => $request->age,
+        $data = $request->validate([
+            'name'      => 'required|string|max:255',
+            'birthday'  => 'required|date',
+            'age'       => 'required|integer',
+            'experiences.*.title'       => 'nullable|string',
+            'experiences.*.description' => 'nullable|string',
+            'skills.*.name'             => 'nullable|string',
+            'skills.*.proficiency_level'=> 'nullable|string',
+            'qualifications.*.title'    => 'nullable|string',
+            'qualifications.*.institution'=> 'nullable|string',
+            'qualifications.*.year'     => 'nullable|string',
+            'contacts.*.type'           => 'nullable|string',
+            'contacts.*.detail'         => 'nullable|string',
         ]);
 
-        // Clear old nested items
+        // Update basic portfolio info
+        $portfolio->update([
+            'name'     => $data['name'],
+            'birthday' => $data['birthday'],
+            'age'      => $data['age'],
+        ]);
+
+        // Delete old nested items
         $portfolio->experiences()->delete();
         $portfolio->skills()->delete();
         $portfolio->qualifications()->delete();
         $portfolio->contacts()->delete();
 
-        // Add new nested items
-        if($request->experiences) {
-            foreach($request->experiences as $exp){
-                $portfolio->experiences()->create($exp);
-            }
+        // Recreate nested items (same as store)
+        if (!empty($data['experiences'])) {
+            $experiences = collect($data['experiences'])
+                ->filter(fn($exp) => !empty($exp['title']))
+                ->values()
+                ->all();
+            $portfolio->experiences()->createMany($experiences);
         }
 
-        if($request->skills) {
-            foreach($request->skills as $skill){
-                $portfolio->skills()->create($skill);
-            }
+        if (!empty($data['skills'])) {
+            $skills = collect($data['skills'])
+                ->filter(fn($s) => !empty($s['name']))
+                ->map(fn($s) => [
+                    'skill_name'        => $s['name'],
+                    'proficiency_level' => $s['proficiency_level'] ?? null
+                ])
+                ->values()
+                ->all();
+            $portfolio->skills()->createMany($skills);
         }
 
-        if($request->qualifications) {
-            foreach($request->qualifications as $q){
-                $portfolio->qualifications()->create($q);
-            }
+        if (!empty($data['qualifications'])) {
+            $qualifications = collect($data['qualifications'])
+                ->filter(fn($q) => !empty($q['title']))
+                ->map(fn($q) => [
+                    'qualification_name' => $q['title'],
+                    'institution'        => $q['institution'] ?? null,
+                    'year'               => $q['year'] ?? null
+                ])
+                ->values()
+                ->all();
+            $portfolio->qualifications()->createMany($qualifications);
         }
 
-        if($request->contacts) {
-            foreach($request->contacts as $c){
-                $portfolio->contacts()->create($c);
-            }
+        if (!empty($data['contacts'])) {
+            $contacts = collect($data['contacts'])
+                ->filter(fn($c) => !empty($c['type']) && !empty($c['detail']))
+                ->map(fn($c) => [
+                    'type'   => $c['type'],
+                    'value'  => $c['detail']
+                ])
+                ->values()
+                ->all();
+            $portfolio->contacts()->createMany($contacts);
         }
 
-        return redirect()->route('dashboard')->with('success','Portfolio updated!');
+        return redirect()->route('dashboard')->with('success', 'Portfolio updated successfully!');
     }
 
-//     public function index()
-// {
-//     $user = auth()->user();
-//     $portfolio = $user->portfolio()->first();
 
-//     if($portfolio){
-//         return redirect()->route('portfolio.edit', $portfolio->id);
-//     }
 
-//     return redirect()->route('portfolio.create');
-// }
-public function destroy(Portfolio $portfolio)
-{
-    $this->authorize('delete', $portfolio); // Optional
 
-    $portfolio->experiences()->delete();
-    $portfolio->skills()->delete();
-    $portfolio->qualifications()->delete();
-    $portfolio->contacts()->delete();
-    $portfolio->delete();
+    // DELETE
+    public function destroy(Portfolio $portfolio)
+    {
+        $portfolio->experiences()->delete();
+        $portfolio->skills()->delete();
+        $portfolio->qualifications()->delete();
+        $portfolio->contacts()->delete();
+        $portfolio->delete();
 
-    return redirect()->route('dashboard')->with('success', 'Portfolio deleted!');
-}
+        return redirect()->route('dashboard')->with('success', 'Portfolio deleted successfully!');
+    }
 
-}
+} 

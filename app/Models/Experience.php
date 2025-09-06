@@ -13,8 +13,6 @@ class Experience extends Model
         'portfolio_id',
         'title',
         'description',
-        'start_date',
-        'end_date'
     ];
 
     public function portfolio()

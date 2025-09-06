@@ -1,13 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500&display=swap');
-:root{
+/* :root{
     --dark-color: #130F49;
     --light-blue-color: #D0EAEC;
     --light-pink-color: #FFF5F6;
     --light-purple-color: #F8F8FF;
     --blur-color: #f1eded;
     --subtext-color: #CFCEDA;
-}
+} */
 
 *{
     box-sizing: border-box;
@@ -27,14 +27,30 @@ body{
     height:100%;
 }
 
-h1, h2, h3, h4, h5, h6, .heading, .logo{
-    font-weight: bold;
-    font-family: 'Space Grotesk','Roboto',sans-serif;
+
+h1, h2, h3, h4, h5, h6, .heading, .logo {
+    font-family: 'Poppins', 'Space Grotesk', 'Roboto', sans-serif;
+    font-weight: 700;
+    line-height: 1.2;
+    margin: 0.6em 0;
 }
 
-p,span,li,input,div, tr, td, th, section, article, label, .control{
-    font-size: 2rem;
+
+p, span, li, input, div, tr, td, th, section, article, label, .control {
+    font-family: 'Inter', 'Roboto', sans-serif;
+    font-size: 1.25rem;   
+    line-height: 1.7;   
+    color: #2d2d2d;
 }
+
+
+h1 { font-size: 4rem; }     
+h2 { font-size: 3rem; }     
+h3 { font-size: 2.25rem; } 
+h4 { font-size: 1.875rem; }
+h5 { font-size: 1.5rem; }  
+h6 { font-size: 1.25rem; }
+
 
 a{
     text-decoration: none;

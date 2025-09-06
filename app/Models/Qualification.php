@@ -8,12 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class Qualification extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'portfolio_id',
         'qualification_name',
         'institution',
-        'year'
-       
+        'year',
     ];
 
     public function portfolio()

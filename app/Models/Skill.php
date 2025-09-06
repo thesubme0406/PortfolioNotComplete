@@ -8,11 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class Skill extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'portfolio_id',
         'skill_name',
         'proficiency_level',
-       
     ];
 
     public function portfolio()

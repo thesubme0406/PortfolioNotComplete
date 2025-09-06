@@ -12,8 +12,7 @@ class Contact extends Model
     protected $fillable = [
         'portfolio_id',
         'type',
-        'value'
-       
+        'value',
     ];
 
     public function portfolio()

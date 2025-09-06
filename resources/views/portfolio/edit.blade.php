@@ -4,28 +4,24 @@
 <div class="container">
     <h1>Edit Portfolio</h1>
 
-    @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
-    @endif
-
     <form action="{{ route('portfolio.update', $portfolio->id) }}" method="POST">
         @csrf
         @method('PUT')
 
-        {{-- Basic Portfolio Info --}}
+        {{-- Basic Info --}}
         <div class="mb-3">
             <label>Name</label>
-            <input type="text" name="name" class="form-control" value="{{ $portfolio->name }}" required>
+            <input type="text" name="name" class="form-control" value="{{ old('name', $portfolio->name) }}" required>
         </div>
 
         <div class="mb-3">
             <label>Birthday</label>
-            <input type="date" name="birthday" class="form-control" value="{{ $portfolio->birthday }}" required>
+            <input type="date" name="birthday" class="form-control" value="{{ old('birthday', $portfolio->birthday) }}" required>
         </div>
 
         <div class="mb-3">
             <label>Age</label>
-            <input type="number" name="age" class="form-control" value="{{ $portfolio->age }}" required>
+            <input type="number" name="age" class="form-control" value="{{ old('age', $portfolio->age) }}" required>
         </div>
 
         {{-- Experiences --}}
@@ -33,9 +29,9 @@
         <div id="experiences-wrapper">
             @foreach($portfolio->experiences as $i => $exp)
             <div class="experience-item mb-2">
-                <input type="text" name="experiences[{{ $i }}][title]" value="{{ $exp->title }}" class="form-control mb-1" placeholder="Title">
-                <textarea name="experiences[{{ $i }}][description]" class="form-control mb-1" placeholder="Description">{{ $exp->description }}</textarea>
-                <button type="button" class="btn btn-danger remove-item">Remove</button>
+                <input type="text" name="experiences[{{ $i }}][title]" value="{{ $exp->title }}" class="form-control mb-1">
+                <textarea name="experiences[{{ $i }}][description]" class="form-control mb-1">{{ $exp->description }}</textarea>
+                <button type="button" class="btn btn-danger btn-sm remove-item">Remove</button>
             </div>
             @endforeach
         </div>
@@ -46,9 +42,8 @@
         <div id="skills-wrapper">
             @foreach($portfolio->skills as $i => $skill)
             <div class="skill-item mb-2">
-                <input type="text" name="skills[{{ $i }}][skill_name]" value="{{ $skill->skill_name }}" class="form-control mb-1" placeholder="Skill">
-                <input type="text" name="skills[{{ $i }}][proficiency_level]" value="{{ $skill->proficiency_level }}" class="form-control mb-1" placeholder="Proficiency">
-                <button type="button" class="btn btn-danger remove-item">Remove</button>
+                <input type="text" name="skills[{{ $i }}][name]" value="{{ $skill->name }}" class="form-control mb-1">
+                <button type="button" class="btn btn-danger btn-sm remove-item">Remove</button>
             </div>
             @endforeach
         </div>
@@ -59,10 +54,9 @@
         <div id="qualifications-wrapper">
             @foreach($portfolio->qualifications as $i => $q)
             <div class="qualification-item mb-2">
-                <input type="text" name="qualifications[{{ $i }}][qualification_name]" value="{{ $q->qualification_name }}" class="form-control mb-1" placeholder="Qualification">
-                <input type="text" name="qualifications[{{ $i }}][institution]" value="{{ $q->institution }}" class="form-control mb-1" placeholder="Institution">
-                <input type="text" name="qualifications[{{ $i }}][year]" value="{{ $q->year }}" class="form-control mb-1" placeholder="Year">
-                <button type="button" class="btn btn-danger remove-item">Remove</button>
+                <input type="text" name="qualifications[{{ $i }}][title]" value="{{ $q->title }}" class="form-control mb-1">
+                <textarea name="qualifications[{{ $i }}][institution]" class="form-control mb-1">{{ $q->institution }}</textarea>
+                <button type="button" class="btn btn-danger btn-sm remove-item">Remove</button>
             </div>
             @endforeach
         </div>
@@ -73,9 +67,9 @@
         <div id="contacts-wrapper">
             @foreach($portfolio->contacts as $i => $c)
             <div class="contact-item mb-2">
-                <input type="text" name="contacts[{{ $i }}][type]" value="{{ $c->type }}" class="form-control mb-1" placeholder="Type">
-                <input type="text" name="contacts[{{ $i }}][value]" value="{{ $c->value }}" class="form-control mb-1" placeholder="Value">
-                <button type="button" class="btn btn-danger remove-item">Remove</button>
+                <input type="text" name="contacts[{{ $i }}][type]" value="{{ $c->type }}" class="form-control mb-1">
+                <input type="text" name="contacts[{{ $i }}][detail]" value="{{ $c->detail }}" class="form-control mb-1">
+                <button type="button" class="btn btn-danger btn-sm remove-item">Remove</button>
             </div>
             @endforeach
         </div>
@@ -85,83 +79,70 @@
     </form>
 </div>
 
-
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    function attachRemoveButtons() {
-        document.querySelectorAll('.remove-item').forEach(btn => {
-            btn.onclick = function() {
-                this.parentElement.remove();
-            };
-        });
-    }
+let expCount = {{ $portfolio->experiences->count() }};
+let skillCount = {{ $portfolio->skills->count() }};
+let qualCount = {{ $portfolio->qualifications->count() }};
+let contactCount = {{ $portfolio->contacts->count() }};
 
-    attachRemoveButtons();
+// Add Experience
+document.getElementById('add-experience').addEventListener('click', () => {
+    const wrapper = document.getElementById('experiences-wrapper');
+    const div = document.createElement('div');
+    div.classList.add('experience-item','mb-2');
+    div.innerHTML = `
+        <input type="text" name="experiences[${expCount}][title]" class="form-control mb-1" placeholder="Title">
+        <textarea name="experiences[${expCount}][description]" class="form-control mb-1" placeholder="Description"></textarea>
+        <button type="button" class="btn btn-danger btn-sm remove-item">Remove</button>
+    `;
+    wrapper.appendChild(div);
+    expCount++;
+});
 
-    // Experiences
-    let expIndex = {{ $portfolio->experiences->count() }};
-    document.getElementById('add-experience').onclick = function() {
-        let wrapper = document.getElementById('experiences-wrapper');
-        let div = document.createElement('div');
-        div.className = 'experience-item mb-2';
-        div.innerHTML = `
-            <input type="text" name="experiences[${expIndex}][title]" class="form-control mb-1" placeholder="Title">
-            <textarea name="experiences[${expIndex}][description]" class="form-control mb-1" placeholder="Description"></textarea>
-            <button type="button" class="btn btn-danger remove-item">Remove</button>
-        `;
-        wrapper.appendChild(div);
-        attachRemoveButtons();
-        expIndex++;
-    };
+// Add Skill
+document.getElementById('add-skill').addEventListener('click', () => {
+    const wrapper = document.getElementById('skills-wrapper');
+    const div = document.createElement('div');
+    div.classList.add('skill-item','mb-2');
+    div.innerHTML = `
+        <input type="text" name="skills[${skillCount}][name]" class="form-control mb-1" placeholder="Skill">
+        <button type="button" class="btn btn-danger btn-sm remove-item">Remove</button>
+    `;
+    wrapper.appendChild(div);
+    skillCount++;
+});
 
-    // Skills
-    let skillIndex = {{ $portfolio->skills->count() }};
-    document.getElementById('add-skill').onclick = function() {
-        let wrapper = document.getElementById('skills-wrapper');
-        let div = document.createElement('div');
-        div.className = 'skill-item mb-2';
-        div.innerHTML = `
-            <input type="text" name="skills[${skillIndex}][skill_name]" class="form-control mb-1" placeholder="Skill">
-            <input type="text" name="skills[${skillIndex}][proficiency_level]" class="form-control mb-1" placeholder="Proficiency">
-            <button type="button" class="btn btn-danger remove-item">Remove</button>
-        `;
-        wrapper.appendChild(div);
-        attachRemoveButtons();
-        skillIndex++;
-    };
+// Add Qualification
+document.getElementById('add-qualification').addEventListener('click', () => {
+    const wrapper = document.getElementById('qualifications-wrapper');
+    const div = document.createElement('div');
+    div.classList.add('qualification-item','mb-2');
+    div.innerHTML = `
+        <input type="text" name="qualifications[${qualCount}][title]" class="form-control mb-1" placeholder="Title">
+        <textarea name="qualifications[${qualCount}][institution]" class="form-control mb-1" placeholder="Institution"></textarea>
+        <button type="button" class="btn btn-danger btn-sm remove-item">Remove</button>
+    `;
+    wrapper.appendChild(div);
+    qualCount++;
+});
 
-    // Qualifications
-    let qualIndex = {{ $portfolio->qualifications->count() }};
-    document.getElementById('add-qualification').onclick = function() {
-        let wrapper = document.getElementById('qualifications-wrapper');
-        let div = document.createElement('div');
-        div.className = 'qualification-item mb-2';
-        div.innerHTML = `
-            <input type="text" name="qualifications[${qualIndex}][qualification_name]" class="form-control mb-1" placeholder="Qualification">
-            <input type="text" name="qualifications[${qualIndex}][institution]" class="form-control mb-1" placeholder="Institution">
-            <input type="text" name="qualifications[${qualIndex}][year]" class="form-control mb-1" placeholder="Year">
-            <button type="button" class="btn btn-danger remove-item">Remove</button>
-        `;
-        wrapper.appendChild(div);
-        attachRemoveButtons();
-        qualIndex++;
-    };
+// Add Contact
+document.getElementById('add-contact').addEventListener('click', () => {
+    const wrapper = document.getElementById('contacts-wrapper');
+    const div = document.createElement('div');
+    div.classList.add('contact-item','mb-2');
+    div.innerHTML = `
+        <input type="text" name="contacts[${contactCount}][type]" class="form-control mb-1" placeholder="Type">
+        <input type="text" name="contacts[${contactCount}][detail]" class="form-control mb-1" placeholder="Detail">
+        <button type="button" class="btn btn-danger btn-sm remove-item">Remove</button>
+    `;
+    wrapper.appendChild(div);
+    contactCount++;
+});
 
-    // Contacts
-    let contactIndex = {{ $portfolio->contacts->count() }};
-    document.getElementById('add-contact').onclick = function() {
-        let wrapper = document.getElementById('contacts-wrapper');
-        let div = document.createElement('div');
-        div.className = 'contact-item mb-2';
-        div.innerHTML = `
-            <input type="text" name="contacts[${contactIndex}][type]" class="form-control mb-1" placeholder="Type">
-            <input type="text" name="contacts[${contactIndex}][value]" class="form-control mb-1" placeholder="Value">
-            <button type="button" class="btn btn-danger remove-item">Remove</button>
-        `;
-        wrapper.appendChild(div);
-        attachRemoveButtons();
-        contactIndex++;
-    };
+// Remove any item
+document.addEventListener('click', e => {
+    if(e.target.classList.contains('remove-item')) e.target.closest('div').remove();
 });
 </script>
 @endsection
