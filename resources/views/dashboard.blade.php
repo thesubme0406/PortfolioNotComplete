@@ -25,10 +25,10 @@
                     </button>
                 </form>
             </div>
-        @else
+        {{-- @else
             <a href="{{ route('portfolio.create') }}" class="btn btn-gradient shadow-sm">
                 Create Portfolio
-            </a>
+            </a> --}}
         @endif
     </div>
 

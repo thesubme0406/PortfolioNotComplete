@@ -23,9 +23,9 @@
     transition: color 0.3s ease;
 }
 
-/* Hover effect */
+/* hover effect */
 .text-link:hover, .footer nav a:hover, .header nav a:hover {
-    color: #ffd700; /* golden accent when hover */
+    color: #ffd700; 
 }
 
 
@@ -60,3 +60,18 @@
     height: inherit;
 }
 
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; 
+}
+
+.content-wrapper {
+    flex: 1; 
+}

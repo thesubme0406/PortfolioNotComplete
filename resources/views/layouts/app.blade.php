@@ -35,7 +35,9 @@
 
 
     </div>
-    @yield('content')
+    <div class="content-wrapper">
+        @yield('content')
+    </div>
 
     <div class="footer flex flex-row justify-content-space-between bg-gray-200 px-[10%] py-[2vmax]">
         <nav class=" flex flex-row justify-content-space-around align-center">

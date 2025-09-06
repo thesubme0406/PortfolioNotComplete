@@ -17,23 +17,20 @@ class Portfolio extends Model
     ];
 
     // Relations
-    public function experiences()
-    {
-        return $this->hasMany(Experience::class);
-    }
-
-    public function skills()
-    {
+    public function skills() {
         return $this->hasMany(Skill::class);
     }
-
-    public function qualifications()
-    {
+    
+    public function experiences() {
+        return $this->hasMany(Experience::class);
+    }
+    
+    public function qualifications() {
         return $this->hasMany(Qualification::class);
     }
-
-    public function contacts()
-    {
+    
+    public function contacts() {
         return $this->hasMany(Contact::class);
     }
+    
 }
